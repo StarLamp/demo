@@ -28,3 +28,8 @@ def win_run():
     try:
         task = manager.get_task_queue()
         result = manager.get_result_queue()
+        #添加任务
+        for url in ['','','']:
+            print()
+    finally:
+        manager.shutdown()
