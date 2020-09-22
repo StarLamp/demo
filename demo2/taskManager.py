@@ -33,3 +33,7 @@ def win_run():
             print()
     finally:
         manager.shutdown()
+if __name__ == '__main__':
+    freeze_support()
+    win_run()
+
