@@ -1,21 +1,16 @@
-import json
-
-import requests
+import bs4
 from bs4 import BeautifulSoup
+import requests
+from pip._vendor import chardet
+r = requests.get('http://jx.ah.gov.cn/')
+data = r.content
+soup = BeautifulSoup(data,'html.parser',from_encoding='utf-8')
+# for child in soup.stripped_strings:
+#     print((repr(child)))
+# for child in soup.head.meta.next_sibling:
+#   print(child)
+# for s in soup.find_all('link'):
+#     print(s)
+for s in soup.body.stripped_strings:
+    print(repr(s))
 
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'
-headers = {'User-Agent':user_agent}
-r = requests.get('http://seputu.com/',headers = headers)
-soup = BeautifulSoup(r.text,'lxml')
-contents = []
-list = []
-for mulu in soup.find_all(class_='mulu'):
-    h2 = mulu.find('h2')
-    if h2!=None:
-        h2_title = h2.string
-        contents.append({'title':h2_title,'list':list})
-    for a in mulu.find_all('a'):
-        box_title = a.string
-        list.append({'box_title':box_title,'href':a['href']})
-with open('json','w') as fp:
-    json.dump()
