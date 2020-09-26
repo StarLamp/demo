@@ -1,6 +1,6 @@
 # conding:utf-8
 import requests
-class HtmlDownLoader(object):
+class HtmlDownloader(object):
 
     def download(self,url):
         if url is None:

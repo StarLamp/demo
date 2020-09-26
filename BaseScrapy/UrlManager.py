@@ -4,7 +4,7 @@ class UrlManager(object):
         self.old_urls = set()#已爬取的url地址
     def has_new_url(self):
         #判断是否有未爬取的url地址 return
-        return self.new_urls_size()!=0
+        return self.new_url_size()!=0
     def get_new_url(self):
         #获取一个未爬取的URL地址
         new_url = self.new_urls.pop()
@@ -29,5 +29,5 @@ class UrlManager(object):
         #获取未爬取URL集合的大小
         return len(self.new_urls)
 
-    def old_url_siez(self):
+    def old_url_size(self):
         return len(self.old_urls)
