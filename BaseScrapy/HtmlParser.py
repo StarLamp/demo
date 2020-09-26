@@ -9,7 +9,7 @@ class HtmlParser(object):
             return
         soup = BeautifulSoup(html_cont,'html.parser')
         new_urls = self._get_new_urls(page_url,soup)
-        new_data = self.get_new_data(page_url,soup)
+        new_data = self._get_new_data(page_url,soup)
         return new_urls,new_data
 
     def _get_new_urls(self, page_url, soup):
@@ -25,15 +25,16 @@ class HtmlParser(object):
             new_url = link['href']
             new_full_url = urlparse(page_url,new_url)
             new_urls.add(new_full_url)
-    def _get_new_data(self, page_url, soup):
-        '''抽取有效数据
+        return new_urls
 
+    def _get_new_data(self,page_url,soup):
+        '''抽取有效数据
         '''
         data = {}
         data['url'] = page_url
         title = soup.find('dd',class_='lemmaWgt-lemmaTitle-title').find('h1')
         data['title'] = title.get_text()
         summary = soup.find('div',class_='lemma-summary')
-        # 获取tag中包含的所有文本内容，包括子孙tag中的内容,并将结果作为Unicode字符串返回                data['summary']
+        # 获取tag中包含的所有文本内容，包括子孙tag中的内容,并将结果作为Unicode字符串返回
         data['summary']=summary.get_text()
         return data
