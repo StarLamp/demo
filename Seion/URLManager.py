@@ -50,10 +50,46 @@ class UrlManager(object):
         for url in urls:
             self.add_new_url(url)
 
+    def new_url_size(self):
+        '''
+        获取未爬取URL集合的大小
+        :return:
+        '''
+        return len(self.new_urls)
 
-    def load_process(self, param):
-        pass
+    def old_url_size(self):
+        '''
+        获取已经爬取URL集合的大小
+        :return:
+        '''
+        return len(self.old_urls)
 
-    def new_urls_size(self):
-        pass
+
+    def save_progress(self,path,data):
+        '''
+        保持进度
+        :param path: 文件路径
+        :param data: 数据
+        :return:
+        '''
+        with open(path,'wb') as f:
+            pickle.dump(data,f)
+
+
+    def load_process(self, path):
+        '''
+        从本地加载文件
+        :param path:
+        :return:
+        '''
+
+        print('文件加载进度：%s' % path)
+        try:
+            with open(path,'wb') as f:
+                tmp = pickle.load(f)
+                return tmp
+        except:
+            print('文件进度失败')
+
+        return set()
 
