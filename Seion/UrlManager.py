@@ -7,6 +7,8 @@ class UrlManager(object):
         self.new_urls = self.load_process('new_urls.txt')
         #已爬取
         self.old_urls = self.load_process('old_urls.txt')
+        
+        
     def has_new_url(self):
         '''
         判断是否还有未爬取的url
@@ -50,7 +52,7 @@ class UrlManager(object):
         for url in urls:
             self.add_new_url(url)
 
-    def new_url_size(self):
+    def new_urls_size(self):
         '''
         获取未爬取URL集合的大小
         :return:
@@ -92,4 +94,5 @@ class UrlManager(object):
             print('文件进度失败')
 
         return set()
+
 
