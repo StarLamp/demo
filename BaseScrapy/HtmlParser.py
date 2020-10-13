@@ -1,3 +1,4 @@
+import json
 import re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
@@ -38,3 +39,75 @@ class HtmlParser(object):
         # 获取tag中包含的所有文本内容，包括子孙tag中的内容,并将结果作为Unicode字符串返回
         data['summary']=summary.get_text()
         return data
+
+    def parser_url(self,page_url,response):
+        pattern = re.compile('http://movie.mtime.com/(\d+)')
+        urls = pattern.findall(response)
+        if urls is not None:
+            #将urls进行去重
+            return list(set(urls))
+        else:
+            return None
+
+    def pareser_json(self,page_url,response):
+        '''
+        解析响应
+        :param page_url:
+        :param response:
+        :return:
+        '''
+
+        pattern = re.compile('=(.*);')
+        result = pattern.findall(response)
+        if result is not None:
+            value = json.loads(result)
+            try:
+                isRelease = value.get('value').get('isRelease')
+            except Exception as e :
+                print(e)
+                return None
+            if isRelease:
+                if value.get('value').get('hotValue') is None:
+                    return self._parser_release(page_url,value)
+                else:
+                    return self._parser_no_release(page_url,value,isRelease = 2)
+
+    def _parser_release(self, page_url, value):
+        '''
+        解析已经上映的影片
+        :param page_url:电影链接
+        :param value:json数据
+        :return: 
+        '''
+        try:
+            isRlease = 1
+            movieRating = value.get('value').get('movieRating')
+            boxOffice = value.get('value').get('boxOffice')
+            moiveTitle = value.get('value').get('movieTitle')
+
+            RPictureFinal = movieRating.get('RPictureFinal')
+            RStoryFinal = movieRating.get('RStoryFinal')
+            RDirectorFinal = movieRating.get('RDirectorFinal')
+            ROtherFinal = movieRating.get('ROtherFinal')
+            RatingFinal = movieRating.get('RatingFinal')
+            MovieId =  movieRating.get('MovieId')
+            Usercount = movieRating.get('Usercount')
+            AttitudeCount =  movieRating.get('AttitudeCount')
+            TotalBoxOffice =  boxOffice.get('TotalBoxOffice')
+            TotalBoxOfficeUnit =  boxOffice.get('TotalBoxOfficeUnit')
+            TodayBoxOffice =  boxOffice.get('TodayBoxOffice')
+            TodayBoxOfficeUnit =  boxOffice.get('TodayBoxOfficeUnit')
+
+            ShowDays = boxOffice.get('ShowDays')
+            try:
+                Rank = boxOffice.get('Rank')
+            except Exception as e :
+                print(e)
+                return None
+                
+        except Exception as e:
+            print(e)
+            return None
+
+    def _parser_no_release(self, page_url, value, isRelease):
+        pass
